@@ -69,26 +69,52 @@ names(sf_1819)[32] <- 'PropValue_1819'
 
 sf_1819_clean <- sf_1819 %>%
   select(Site, Block_Lot, LandValue_1819, PropValue_1819) %>%
-    mutate(TotValue_1819 = PropValue_1819 + LandValue_1819) %>%
-  mutate(pct_change = )
-```
-```{r}
-AffHousing_loc <- read_csv("policymap_AH.csv") %>%
-  select(Site, Block_Lot, LandValue_1819, PropValue_1819) %>%
     mutate(TotValue_1819 = PropValue_1819 + LandValue_1819)
-
 ```
+```{r}
+AffHousing_loc <- read_csv("policymap_AH.csv")
 
+names(AffHousing_loc)[1] <- 'PropID'
+
+names(AffHousing_loc)[3] <- 'PropName'
+
+names(AffHousing_loc)[6] <- 'Address'
+
+names(AffHousing_loc)[10] <- 'ZIPCode'
+
+names(AffHousing_loc)[12] <- 'TotalSubUnits'
+
+names(AffHousing_loc)[13] <- 'No_residents'
+
+names(AffHousing_loc)[38] <- 'AvgIncome'
+
+names(AffHousing_loc)[41] <- 'Income_pct_AMI'
+
+names(AffHousing_loc)[45] <- 'type_unit'
+
+AH_loc_clean <- AffHousing_loc %>%
+  select(PropID, Block_Lot, PropName, Address, ZIPCode, TotalSubUnits, No_residents, AvgIncome, Income_pct_AMI, type_unit)
+```
 
 ```{r}
-data <- left_join(sf_1314_clean, sf_1819_clean) %>%
-  left_join(AffHousing_loc)
+data <- left_join(sf_1314_clean, sf_1819_clean)
 
-%>% 
-  #left_join(election) %>%
-  #left_join(CO_type) %>%
-  #left_join(covid)
+data2 <- left_join(data, AH_loc_clean)
+
+data_clean <- data2 %>%
+  mutate(pct_change = TotValue_1819 / TotValue_1314) %>%
+  filter(pct_change != "NA") %>%
+  filter(pct_change != "NaN")
+
+data_prop_change <- data_clean %>%    
+mutate(value_change = ifelse(pct_change > 1, "growth", "decrease"))
 ```
+
+```{r}
+kable(head(data_prop_change))
+```
+
+
 ## References
 
 Nguyen, Mai Thi, "Does Affordable Housing Detrimentally Affect Property Values? A Review of the Literature." Journal of Planning Literature, 2005-08, Vol.20 (1), 15-26. doi: 10.1177/0885412205277069
