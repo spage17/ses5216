@@ -1,0 +1,63 @@
+---
+title: "ses5206_1"
+author: "SP + LZ"
+date: "10/24/2021"
+output: 
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE}
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(knitr)
+```
+
+# Research Question
+
+How does affordable housing impact property value? Specifically for the purposes of this assignment, how does affordable housing (defined a variety of ways) affect property values in San Francisco, California, between 2013-14 and 2018-19?
+
+# Prior Research 
+
+TKTKTKTK
+
+# Data
+
+The sample population for this study is property values in San Francisco, California, in 2013-14 and 2018-19. The analysis will include the following variables: 
+
+* 
+* 
+* 
+
+## Load Data 
+
+```{r}
+sf_1314 <- read_csv("sf_tax_1314.csv") 
+
+names(sf_1314)[1] <- 'Site'
+
+names(sf_1314)[3] <- 'Block_Lot'
+
+names(sf_1314)[20] <- 'SaleDate'
+
+names(sf_1314)[29] <- 'FixValue'
+
+names(sf_1314)[30] <- 'ImpValue'
+
+names(sf_1314)[31] <- 'LandValue'
+
+names(sf_1314)[32] <- 'PropValue'
+
+sf_1314_clean <- sf_1314 %>%
+  select(Site, Block_Lot, SaleDate, FixValue, ImpValue, LandValue, PropValue)
+
+sf_1819 <- read_csv("sf_tax_1819.csv") 
+
+```
