@@ -47,17 +47,31 @@ names(sf_1314)[3] <- 'Block_Lot'
 
 names(sf_1314)[20] <- 'SaleDate'
 
-names(sf_1314)[29] <- 'FixValue'
-
-names(sf_1314)[30] <- 'ImpValue'
-
 names(sf_1314)[31] <- 'LandValue'
 
 names(sf_1314)[32] <- 'PropValue'
 
-sf_1314_clean <- sf_1314 %>%
-  select(Site, Block_Lot, SaleDate, FixValue, ImpValue, LandValue, PropValue)
+#mutate(sf_1314, totalValue = LandValue + PropValue) 
 
+sf_1314_clean <- sf_1314 %>%
+  select(Site, Block_Lot, SaleDate, LandValue, PropValue)
+```
+```{r}
 sf_1819 <- read_csv("sf_tax_1819.csv") 
 
+names(sf_1819)[1] <- 'Site'
+
+names(sf_1819)[3] <- 'Block_Lot'
+
+names(sf_1819)[20] <- 'SaleDate'
+
+names(sf_1819)[31] <- 'LandValue'
+
+names(sf_1819)[32] <- 'PropValue'
+
+#mutate(sf_1314, totalValue = LandValue + PropValue) 
+
+sf_1819_clean <- sf_1819 %>%
+  select(Site, Block_Lot, SaleDate, LandValue, PropValue)
 ```
+
