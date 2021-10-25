@@ -1,0 +1,105 @@
+---
+title: "ses5206_1"
+author: "SP + LZ"
+date: "10/24/2021"
+output: 
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE}
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(knitr)
+```
+
+# Research Question
+
+How does affordable housing impact property value? Specifically for the purposes of this assignment, how does affordable housing (defined a variety of ways) affect property values in San Francisco, California, between 2013-14 and 2018-19?
+
+# Prior Research 
+
+In a policy brief written by the Center for Housing Policy, findings suggested that affordable housing generally does not have significant impacts on surrounding property values, though the effects vary based on specific context. For example, clustered developments showed some negative impact on housing developments, while more diffuse development of physical affordable housing structures had little to no impact. In "distressed areas," the rehabilitation of housing stock to make it available at an affordable rate was shown to have some positive impacts on property values. 
+
+Nguyen (2005)
+
+# Data
+
+The sample population for this study is property values in San Francisco, California, in 2013-14 and 2018-19. The analysis will include the following variables: 
+
+* 
+* 
+* 
+
+## Load Data 
+
+```{r}
+sf_1314 <- read_csv("sf_tax_1314.csv") 
+
+names(sf_1314)[1] <- 'Site'
+
+names(sf_1314)[3] <- 'Block_Lot'
+
+names(sf_1314)[31] <- 'LandValue_1314'
+
+names(sf_1314)[32] <- 'PropValue_1314'
+
+sf_1314_clean <- sf_1314 %>%
+  select(Site, Block_Lot, LandValue_1314, PropValue_1314) %>%
+    mutate(TotValue_1314 = PropValue_1314 + LandValue_1314)
+```
+
+```{r}
+sf_1819 <- read_csv("sf_tax_1819.csv") 
+
+names(sf_1819)[1] <- 'Site'
+
+names(sf_1819)[2] <- 'Block_Lot'
+
+names(sf_1819)[31] <- 'LandValue_1819'
+
+names(sf_1819)[32] <- 'PropValue_1819'
+```
+
+
+```{r}
+sf_1819_clean <- sf_1819 %>%
+  select(Site, Block_Lot, LandValue_1819, PropValue_1819) %>%
+    mutate(TotValue_1819 = PropValue_1819 + LandValue_1819) 
+```
+```{r}
+affhousing_loc <- read_csv("policymap_AH.csv")
+
+names(affhousing_loc)[1] <- 'Site'
+```
+
+
+```{r}
+data <- left_join(sf_1314_clean, sf_1819_clean) %>%
+  left_join(affhousing_loc) %>%
+  mutate(pct_change = ((TotValue_1314 - TotValue_1819)/TotValue_1314)*-100) %>%
+  mutate(newpropval = ifelse(pct_change > 0.5, "Increase", "Decrease")) %>%
+  select(Site, Block_Lot, TotValue_1314, TotValue_1819, pct_change, newpropval)
+  
+
+```
+```{r}
+
+```
+
+
+```{r}
+  #left_join(election) %>%
+  #left_join(CO_type) %>%
+  #left_join(covid)
+```
+## References
+
+Nguyen, Mai Thi, "Does Affordable Housing Detrimentally Affect Property Values? A Review of the Literature." Journal of Planning Literature, 2005-08, Vol.20 (1), 15-26. doi: 10.1177/0885412205277069
